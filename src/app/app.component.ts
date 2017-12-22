@@ -1,3 +1,5 @@
+import { Apollo } from 'angular-apollo';
+
 import { Component } from '@angular/core';
 
 @Component({
@@ -7,4 +9,9 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'app';
+  constructor(apollo: Apollo) {
+    apollo.query({
+      query: gql`{ allSites }`
+    }).then(console.log);
+  }
 }

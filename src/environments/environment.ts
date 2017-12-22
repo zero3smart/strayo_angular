@@ -4,5 +4,9 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  http: 'http',
+  be_host: 'db.strayos.com',
+  be_port: '9000',
+  api_prefix: 'api/v2'
 };
