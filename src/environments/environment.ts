@@ -8,5 +8,5 @@ export const environment = {
   http: 'http',
   be_host: 'db.strayos.com',
   be_port: '9000',
-  api_prefix: 'api/v2'
+  api_prefix: 'api'
 };

@@ -4,7 +4,7 @@ import {
     GraphQLString,
 } from 'graphql';
 
-import { fetchResponseByURLAsJSON } from '../util/fetch';
+import { getFullUrl } from '../util/getApiUrl';
 
 import { DatasetType } from './datasetType';
 import { ResourceType } from './resourceType';
@@ -21,7 +21,7 @@ export const AnnotationType = new GraphQLObjectType({
         data: { type: GraphQLString },
         resources: {
             type: new GraphQLList(ResourceType),
-            resolve: (anno) => fetchResponseByURLAsJSON(`annotations/${anno.id}/resources`)
+            resolve: (anno, args, context) => context.client.get(getFullUrl(`annotations/${anno.id}/resources`)).toPromise(),
         }
     })
 });

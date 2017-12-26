@@ -4,7 +4,7 @@ import {
     GraphQLString,
 } from 'graphql';
 
-import { fetchResponseByURLAsJSON } from '../util/fetch';
+import { getFullUrl } from '../util/getApiUrl';
 
 import { DatasetType } from './datasetType';
 
@@ -16,7 +16,7 @@ export const SiteType = new GraphQLObjectType({
         name: { type: GraphQLString},
         datasets: {
             type: new GraphQLList(DatasetType),
-            resolve: (site) => fetchResponseByURLAsJSON(`sites/${site.id}/datasets`),
+            resolve: (site, args, context) => context.client.get(getFullUrl(`sites/${site.id}/datasets`)),
         }
     })
 });

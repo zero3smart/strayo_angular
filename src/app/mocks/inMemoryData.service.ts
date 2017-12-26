@@ -108,12 +108,14 @@ export class InMemoryDataService implements InMemoryDbService {
             };
         });
         
-        return {
+        const toReturn =  {
             sites,
             datasets,
             annotations,
             resources,
         };
+        console.log('database', toReturn);
+        return toReturn;
     }
 };
 

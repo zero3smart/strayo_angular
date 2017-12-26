@@ -4,14 +4,14 @@ import {
     GraphQLString,
 } from 'graphql';
 
-import { fetchResponseByURLAsJSON } from '../util/fetch';
+import { getFullUrl } from '../util/getApiUrl';
 
 import { AnnotationType } from './annotationType';
 import { ResourceType } from './resourceType';
 
 
 export const DatasetType = new GraphQLObjectType({
-    name: 'DataSet',
+    name: 'Dataset',
     description: 'A Dataset has many annotations',
     fields: () => ({
         id: { type: GraphQLString },
@@ -22,7 +22,7 @@ export const DatasetType = new GraphQLObjectType({
         },
         annotations: {
             type: new GraphQLList(AnnotationType),
-            resolve: (dataset) => fetchResponseByURLAsJSON(`datasets/${dataset.id}/annotations`),
+            resolve: (dataset, args, context) => context.client.get(getFullUrl(`datasets/${dataset.id}/annotations`)).toPromise(),
         },
     })
 });

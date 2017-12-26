@@ -1,10 +1,11 @@
 import { GraphQLSchema } from 'graphql';
+import { QueryType } from './queryType';
 
-const typeDefs = `
+export const typeDefs = `
 type Site {
     id: ID!
     name: String!
-    datasets: [Dataset]!
+    datasets: [String]!
 }
 
 type Dataset {
@@ -29,4 +30,20 @@ type Resource {
     meta: String
     type: String
 }
+
+type Query {
+    hello: String
+    annotations: [Annotation]
+    annotation(id: ID!): Annotation
+    datasets: [Dataset]
+    dataset(id: ID!): Dataset
+    resources: [Resource]
+    resource(id: ID!): Resource,
+    sites: [Site],
+    site(id: ID!): Site,
+}
 `;
+
+export const schema = new GraphQLSchema({
+    query: QueryType,
+});
