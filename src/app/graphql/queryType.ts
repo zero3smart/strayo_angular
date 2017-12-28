@@ -3,7 +3,13 @@ import {
     GraphQLObjectType,
     GraphQLString,
     GraphQLBoolean,
+    GraphQLInt,
+    GraphQLNonNull,
+    GraphQLFloat,
 } from 'graphql';
+
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/forkJoin';
 
 import { getFullUrl } from '../util/getApiUrl';
 
@@ -11,8 +17,11 @@ export const SiteType = new GraphQLObjectType({
     name: 'Site',
     description: 'A site contains many datasets',
     fields: () => ({
-        id: { type: GraphQLString},
+        id: { type: new GraphQLNonNull(GraphQLInt)},
         name: { type: GraphQLString},
+        location: { type: GraphQLString},
+        created_at: { type: GraphQLString},
+        status: { type: GraphQLString},
         datasets: {
             type: new GraphQLList(DatasetType),
             resolve: (site, args, context) => {
@@ -27,16 +36,21 @@ export const DatasetType = new GraphQLObjectType({
     name: 'Dataset',
     description: 'A Dataset has many annotations',
     fields: () => ({
-        id: { type: GraphQLString },
-        name: { type: GraphQLString },
-        createdAt: {
-            type: GraphQLString,
-            resolve: (dataset) => dataset.created_at,
-        },
         annotations: {
             type: new GraphQLList(AnnotationType),
-            resolve: (dataset, args, context) => context.client.get(getFullUrl(`datasets/${dataset.id}/annotations`)).toPromise(),
+            resolve: (dataset, args, context) => {
+                console.log('fetching dataset', dataset);
+                return Observable.forkJoin(...dataset.annotations.map(url => context.client.get(url))).toPromise().catch(err => console.log('my error', err));
+            },
         },
+        created_at: { type: GraphQLString },
+        id: { type: new GraphQLNonNull(GraphQLInt) },
+        is_phantom: { type: GraphQLBoolean },
+        lat: { type: new GraphQLNonNull(GraphQLFloat) },
+        long: { type: new GraphQLNonNull(GraphQLFloat) },
+        name: { type: GraphQLString },
+        status: { type: GraphQLString },
+        updated_at: { type: GraphQLString },
     })
 });
 

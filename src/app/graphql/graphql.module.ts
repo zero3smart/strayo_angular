@@ -34,7 +34,7 @@ export class GraphQLModule {
     // const resolvers = getResolvers(http);
     const restMiddleware = new ApolloLink((operation, forward) => {
       const { operationName, query, variables = {} } = operation;
-      console.log('operation', operation, print(query));
+      // console.log('operation', operation, print(query));
       return new Observable(observer => {
         graphql(schema, print(query), null, { client: http }, variables, operationName )
         // graphql(schema, '{ sites { id name } }', null, null, variables, operationName)

@@ -1,0 +1,6 @@
+<div class="detail-box">
+  <h4><a [routerLink]="['/sites', site.id()]">{{site.name()}}</a></h4>
+  <strong>{{site.location()}}</strong>
+  <span>Added on <strong>{{site.createdAt() | date : medium}}</strong></span>
+  <span>Status: <strong>{{site.status()}}</strong></span>
+</div>

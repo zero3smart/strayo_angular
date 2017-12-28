@@ -1,6 +1,13 @@
 import * as ol from 'openlayers';
 
-class Annotation extends ol.Object {
+export interface IAnnotation {
+    id: number;
+    is_phantom: string;
+    meta: {};
+    type: string;
+}
+
+export class Annotation extends ol.Object {
 
     public data(): ol.Collection<ol.Feature> | ol.Feature;
     public data(data: ol.Collection<ol.Feature> | ol.Feature): this;
