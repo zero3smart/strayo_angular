@@ -37,10 +37,10 @@ export class SitemapComponent implements OnInit {
       })
     });
 
-    this.sitesService.sitesState$.subscribe(
-      (state) => {
+    this.sitesService.sites.subscribe(
+      (sites) => {
         this.markers.clear();
-        this.markers.extend(state.sites.map((site) => {
+        this.markers.extend(sites.map((site) => {
           const dataset = site.getPhantomDataset();
           return new ol.Feature({
             geometry: new ol.geom.Point(ol.proj.fromLonLat([dataset.long(), dataset.lat()])),

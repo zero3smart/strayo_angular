@@ -16,58 +16,60 @@ import { switchMap, map, share, distinctUntilChanged } from 'rxjs/operators';
   styleUrls: ['./dataset-layout.component.css']
 })
 export class DatasetLayoutComponent implements OnInit {
+  site: Site;
+  mainDataset: Dataset;
+  datasets: List<Dataset>;
+
   site$: Observable<Site>;
   mainDataset$: Observable<Dataset>;
   datasets$: Observable<List<Dataset>>;
   constructor(private sitesService: SitesService, private datasetsService: DatasetsService, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    if (!this.sitesService.initialized) {
-      this.sitesService.init();
-    }
     // Get the site
-    this.site$ = this.route.params.pipe(
+    this.route.params.pipe(
       switchMap((params) => {
         const site_id = +params.site_id;
-        return this.sitesService.sitesState$.pipe(
-          map(state => state.sites.find(site => site.id() === site_id)),
-          share(),
+        return this.sitesService.sites.pipe(
+          map(sites => sites.find(site => site.id() === site_id)),
         );
       })
-    );
-
-    this.site$.subscribe((site) => {
+    ).subscribe((site) => {
+      this.site = site;
       if (!site) return;
-      this.datasetsService.setDatasets(site.datasets() || []);
+      console.log('SITE, site');
+      this.datasetsService.setDatasets(site.datasets());
     });
-    // Set the main dataset
-    this.mainDataset$ = this.route.params.pipe(
+    // Setting main
+    this.route.params.pipe(
       switchMap((params) => {
         const dataset_id = +params.dataset_id;
-        return this.datasetsService.getState$().pipe(
-          map(state => state.datasets.find(dataset => dataset.id() === dataset_id)),
-          share(),
+        return this.datasetsService.datasets.pipe(
+          map(datasets => datasets.find(dataset => dataset.id() === dataset_id))
         );
-    }));
-
-    this.mainDataset$.subscribe((dataset) => {
-      if (!dataset) return;
+      })
+    ).subscribe((dataset) => {
+      if (!dataset) {
+        // console.log('RACE CONDITION couldnt get datasets');
+        return;
+      }
+      // console.log('SETTING MAIN DATASETS', dataset);
       this.datasetsService.setMainDataset(dataset);
     });
 
-    // get the datasets
-    this.datasets$ = this.datasetsService.getState$().pipe(
-      map((state) => state.datasets),
-      share()
-    );
-    // Get annotations for datasets
-    this.datasets$.pipe(distinctUntilChanged()).subscribe(
-      (datasets) => {
-        console.log('datasets', datasets);
-        if (datasets.size === 0) return;
-        this.datasetsService.loadAnnotations(datasets.first());
-      }
-    )
+    // Getting datasets
+    this.datasetsService.datasets.subscribe((datasets) => {
+      // console.log('DATASETS', datasets);
+      this.datasets = datasets;
+    });
+
+    // Getting main
+    this.datasetsService.mainDataset.subscribe((dataset) => {
+      this.mainDataset = dataset;
+      if (!dataset) return;
+      // console.log('loading annotations for ', dataset);
+      this.datasetsService.loadAnnotations(dataset);
+    });
   }
 
 }

@@ -18,41 +18,23 @@ import { Dataset } from '../../models/dataset.model';
   styleUrls: ['./sitelayout.component.css'],
 })
 export class SiteLayoutComponent implements OnInit {
-  site$: Observable<Site>;
-  datasets$: Observable<List<Dataset>>;
+  site: Site;
+  datasets: Dataset[];
   constructor(private sitesService: SitesService, private datasetsService: DatasetsService, private route: ActivatedRoute) {}
 
   ngOnInit() {
-    console.log('service', this.datasetsService);
-    if (!this.sitesService.initialized) {
-      this.sitesService.init();
-    }
-    this.site$ = this.route.params.pipe(
+    this.route.params.pipe(
       switchMap((params) => {
         const id = +params.id;
-        // console.log('id', id);
-        return this.sitesService.sitesState$.pipe(
-          // tap(state => console.log('sites', state.sites.toJS().find(site => site.id() === id))),
-          // tap(state => console.log('props', state.sites.map(site => site.getProperties()).toJS())),
-          // tap(state => console.log('found', state.sites.find(site => site.id() === id))),
-          map(state => state.sites.find(site => +site.id() === +id)),
-          share(),
+        return this.sitesService.sites.pipe(
+          map((sites) => sites.find(site => site.id() === id))
         );
       })
-    );
-
-    this.site$.subscribe(
-      (site) => {
-        // this.site = site;
-        if (!site) return;
-        this.datasetsService.setDatasets(site.datasets() || []);
-      }
-    );
-
-    // this.datasets$ = Observable.create((o) => o.next([new Dataset()]));
-    this.datasets$ = this.datasetsService.getState$().pipe(
-      map((state) => state.datasets)
-    );
+    ).subscribe((site) => {
+      this.site = site;
+      this.datasets = site.datasets();
+      if (!site) return;
+      this.datasetsService.setDatasets(site.datasets() || []);
+    });
   }
-
 }

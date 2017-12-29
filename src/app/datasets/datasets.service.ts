@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 
 import * as d3 from 'd3';
 
-import { tap, map, first } from 'rxjs/operators';
+import { tap, map, first, share } from 'rxjs/operators';
 import { isNumeric } from 'rxjs/util/isNumeric';
 
 import { DatasetsState } from './state';
@@ -17,12 +18,25 @@ import { Dataset } from '../models/dataset.model';
 import * as fromRoot from '../reducers';
 import { SetDatasets, SetMainDataset, GetAnnotations } from './actions/actions';
 import { IAnnotation, Annotation } from '../models/annotation.model';
+import { List, Map } from 'immutable';
+import { distinctUntilChanged } from 'rxjs/operators/distinctUntilChanged';
+import { Resource } from '../models/resource.model';
 
 const allAnnotationsQuery = gql`
   query AnnotationsForDataset($datasetID: String!) {
     dataset(id: $datasetID) {
       annotations {
-        id
+        id,
+        data,
+        is_phantom,
+        meta,
+        type,
+        resources {
+          id,
+          type,
+          status,
+          url
+        }
       }
     }
   }
@@ -30,8 +44,22 @@ const allAnnotationsQuery = gql`
 
 @Injectable()
 export class DatasetsService {
+  private datasetsSource = new BehaviorSubject<List<Dataset>>(List([]));
+  datasets = this.datasetsSource.asObservable().pipe(distinctUntilChanged());
+
+  private mainDatasetSource = new BehaviorSubject<Dataset>(null);
+  mainDataset = this.mainDatasetSource.asObservable().pipe(distinctUntilChanged());
+
+  private annotationsSource = new BehaviorSubject<Map<number, List<Annotation>>>(Map());
+  annotations = this.annotationsSource.asObservable().pipe(distinctUntilChanged());
+
   constructor(private store: Store<fromRoot.State>, private apollo: Apollo) {
-    console.log('in constructor');
+    this.getState$().subscribe((state) => {
+      if (!state) return;
+      this.datasetsSource.next(state.datasets);
+      this.mainDatasetSource.next(state.mainDataset);
+      this.annotationsSource.next(state.annotations);
+    });
   }
 
   public getState$() {
@@ -44,21 +72,7 @@ export class DatasetsService {
     this.store.dispatch(new SetDatasets(datasets));
   }
 
-  public setMainDataset(dataset: Dataset | number) {
-    if (isNumeric(dataset)) {
-      this.getState$().pipe(
-        first()
-      )
-      .subscribe((state) => {
-        const found = state.datasets.find((d) => d.id() === dataset);
-        if (!found) {
-          console.error('Could not find dataset with that id');
-          return;
-        }
-        this.store.dispatch(new SetMainDataset(found));
-      });
-      return;
-    }
+  public setMainDataset(dataset: Dataset) {
     this.store.dispatch(new SetMainDataset(dataset));
   }
 
@@ -79,7 +93,12 @@ export class DatasetsService {
     .pipe(
       tap(thing => console.log('got all annotations', thing)),
       map(({ data }) => {
-        return data.dataset.annotations.map((datum) => new Annotation(datum));
+        return data.dataset.annotations.map((datum) => {
+          const anno = new Annotation(datum);
+          const resources: any[] = anno.resources() || [];
+          anno.resources(resources.map(r => new Resource(r)));
+          return anno;
+        });
       })
     );
   }

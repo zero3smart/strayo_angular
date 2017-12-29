@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs/Observable';
 import { map, tap } from 'rxjs/operators';
@@ -9,6 +10,7 @@ import { Site } from './models/site.model';
 import { SitesState } from './sites/state';
 import { SitesService } from './sites/sites.service';
 import { ChangeDetectionStrategy } from '@angular/core';
+import { DatasetsService } from './datasets/datasets.service';
 
 @Component({
   selector: 'app-root',
@@ -19,13 +21,11 @@ import { ChangeDetectionStrategy } from '@angular/core';
 export class AppComponent implements OnInit {
   title = 'app';
   sites$: Observable<List<Site>>;
-  constructor(private sitesService: SitesService) {
+  constructor(private http: HttpClient, private sitesService: SitesService, private datasetsService: DatasetsService) {
   }
   ngOnInit() {
-    this.sitesService.init();
-    this.sites$ = this.sitesService.sitesState$.pipe(
-      tap(state => console.log('update', state)),
-      map(state => state.sites)
-    );
+    console.log('osg', OSG);
+    OSG.globalify();
+    this.sitesService.loadSites();
   }
 }

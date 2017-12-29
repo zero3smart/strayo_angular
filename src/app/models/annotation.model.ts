@@ -1,5 +1,7 @@
 import * as ol from 'openlayers';
 
+import { Resource } from './resource.model';
+
 export interface IAnnotation {
     id: number;
     is_phantom: string;
@@ -49,9 +51,9 @@ export class Annotation extends ol.Object {
         return this.get('meta');
     }
 
-    public resources(): string[];
-    public resources(resources: string[]): this;
-    public resources(resources?: string[]): string[] | this {
+    public resources(): Resource[];
+    public resources(resources: Resource[]): this;
+    public resources(resources?: Resource[]): Resource[] | this {
         if (resources !== undefined) {
             this.set('resources', resources);
             return this;

@@ -12,7 +12,7 @@ const datasetRecord = Record({
 });
 
 export class DatasetsState extends datasetRecord {
-    annotations: Map<number, any>;
+    annotations: Map<number, List<Annotation>>;
     datasets: List<Dataset>;
     mainDataset: Dataset;
     selectedDatasets: List<Dataset>;

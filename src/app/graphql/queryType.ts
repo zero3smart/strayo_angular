@@ -40,7 +40,7 @@ export const DatasetType = new GraphQLObjectType({
             type: new GraphQLList(AnnotationType),
             resolve: (dataset, args, context) => {
                 console.log('fetching dataset', dataset);
-                return Observable.forkJoin(...dataset.annotations.map(url => context.client.get(url))).toPromise().catch(err => console.log('my error', err));
+                return Observable.forkJoin(...dataset.annotations.map(url => context.client.get(url))).toPromise().catch(err => console.log('my error', err))
             },
         },
         created_at: { type: GraphQLString },
@@ -65,7 +65,7 @@ export const AnnotationType = new GraphQLObjectType({
         data: { type: GraphQLString },
         resources: {
             type: new GraphQLList(ResourceType),
-            resolve: (anno, args, context) => context.client.get(getFullUrl(`annotations/${anno.id}/resources`)).toPromise(),
+            resolve: (anno, args, context) => Observable.forkJoin(...anno.resources.map(url => context.client.get(url))).toPromise().catch(err => console.log('my error', err))
         }
     })
 });
@@ -76,7 +76,7 @@ export const ResourceType = new GraphQLObjectType({
     fields: () => ({
         id: { type: GraphQLString },
         type: { type: GraphQLString },
-        url: { type: DatasetType},
+        url: { type: GraphQLString},
         status: { type: GraphQLString },
     })
 });

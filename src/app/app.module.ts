@@ -16,15 +16,18 @@ import { EffectsModule } from '@ngrx/effects';
 import { reducers } from './reducers/index';
 import { Effects } from './effects/effects';
 
-import { SitesEffects } from './sites/effects/sites.effects';
-import { SitesService } from './sites/sites.service';
 import { SiteslayoutComponent } from './components/siteslayout/siteslayout.component';
 import { SitedetailsComponent } from './components/sitedetails/sitedetails.component';
 import { SitemapComponent } from './components/sitemap/sitemap.component';
 import { SiteLayoutComponent } from './components/sitelayout/sitelayout.component';
-import { DatasetsService } from './datasets/datasets.service';
 import { DatasetDetailsComponent } from './components/dataset-details/dataset-details.component';
 import { DatasetLayoutComponent } from './components/dataset-layout/dataset-layout.component';
+import { Map3dComponent } from './components/map-3d/map-3d.component';
+
+import { SitesEffects } from './sites/effects/sites.effects';
+import { SitesService } from './sites/sites.service';
+import { DatasetsService } from './datasets/datasets.service';
+import { TerrainProviderService } from './services/terrainprovider/terrain-provider.service';
 
 @NgModule({
   declarations: [
@@ -34,21 +37,24 @@ import { DatasetLayoutComponent } from './components/dataset-layout/dataset-layo
     SitemapComponent,
     SiteLayoutComponent,
     DatasetDetailsComponent,
-    DatasetLayoutComponent
+    DatasetLayoutComponent,
+    Map3dComponent
   ],
   imports: [
     AppRoutingModule,
     BrowserModule,
     GraphQLModule,
     HttpClientModule,
-    HttpClientInMemoryWebApiModule.forRoot(InMemoryDataService),
+    HttpClientInMemoryWebApiModule.forRoot(InMemoryDataService, {
+      apiBase: 'api/'
+    }),
     StoreModule.forRoot(reducers),
     EffectsModule.forRoot(Effects),
     StoreDevtoolsModule.instrument({
       maxAge: 10
     })
   ],
-  providers: [SitesService, DatasetsService],
+  providers: [SitesService, DatasetsService, TerrainProviderService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

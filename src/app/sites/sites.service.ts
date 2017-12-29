@@ -21,6 +21,9 @@ import { Dataset } from '../models/dataset.model';
 import { SitesState } from '../sites/state';
 import * as sitesActions from './actions/actions';
 import { GetSites } from './actions/actions';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { distinctUntilChanged } from 'rxjs/operators/distinctUntilChanged';
+import { getSitesState } from '../reducers';
 
 const allSitesQuery = gql`{
   sites {
@@ -44,15 +47,23 @@ const allSitesQuery = gql`{
 
 @Injectable()
 export class SitesService {
-  public sitesState$: Observable<SitesState>;
-  public initialized = false;
+  private sitesSource = new BehaviorSubject<List<Site>>(List([]));
+  sites = this.sitesSource.asObservable().pipe(distinctUntilChanged());
+
   constructor(private store: Store<fromRoot.State>, private apollo: Apollo, private http: HttpClient) {
+    this.getState$().subscribe((state) => {
+      if (!state) return;
+      console.log('got state', state);
+      this.sitesSource.next(state.sites);
+    });
   }
 
-  public init() {
+  public getState$() {
+    return this.store.select<SitesState>(getSitesState);
+  }
+
+  public loadSites() {
     this.store.dispatch(new GetSites());
-    this.sitesState$ = this.store.select('sites');
-    this.initialized = true;
   }
 
   // Called by effect

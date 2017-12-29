@@ -21,7 +21,15 @@
       "styles": [
         "styles.css"
       ],
-      "scripts": [],
+      "scripts": [
+        "lib/osgjs/vendors/core.js",
+        "lib/osgjs/vendors/rStats.js",
+        "lib/osgjs/vendors/rStats.extras.js",
+        "lib/osgjs/vendors/bluebird.js",
+        "lib/osgjs/vendors/hammer.js",
+        "lib/osgjs/vendors/leap.js",
+        "lib/osgjs/OSG.js"
+      ],
       "environmentSource": "environments/environment.ts",
       "environments": {
         "dev": "environments/environment.ts",

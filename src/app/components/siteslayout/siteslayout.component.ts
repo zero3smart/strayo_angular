@@ -20,13 +20,7 @@ export class SiteslayoutComponent implements OnInit {
   constructor(private sitesService: SitesService) { }
 
   ngOnInit() {
-    if (!this.sitesService.initialized) {
-      this.sitesService.init();
-    }
-    this.sites$ = this.sitesService.sitesState$.pipe(
-      map(
-      state => state.sites
-    ));
+    this.sites$ = this.sitesService.sites;
   }
 
 }

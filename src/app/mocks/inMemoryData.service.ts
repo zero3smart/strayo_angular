@@ -136,7 +136,7 @@ export class InMemoryDataService implements InMemoryDbService {
                         };
                         resourceID = resources.push(mapdataResource);
                         mapdataResource.id = resourceID - 1;
-                        urls.push(`/resources/${resourceID - 1}`);
+                        urls.push(getFullUrl(`/resources/${resourceID - 1}`));
                         const tilesResource: any = {
                             type: 'tiles',
                             status: Status.COMPLETED,
@@ -144,10 +144,10 @@ export class InMemoryDataService implements InMemoryDbService {
                         };
                         resourceID = resources.push(tilesResource);
                         tilesResource.id = resourceID - 1;
-                        urls.push(`/resources/${resourceID - 1}`);
+                        urls.push(getFullUrl(`/resources/${resourceID - 1}`));
 
                         break;
-                    case 3:
+                    case 2:
                         type = 'stereoscope';
                         meta = '{}';
                         data = '{}';
@@ -158,15 +158,15 @@ export class InMemoryDataService implements InMemoryDbService {
                         };
                         resourceID = resources.push(mtljsResource);
                         mtljsResource.id = resourceID - 1;
-                        urls.push(`/resources/${resourceID - 1}`);
+                        urls.push(getFullUrl(`/resources/${resourceID - 1}`));
                         const smdjsResource: any = {
-                            type: 'mtljs',
+                            type: 'smdjs',
                             status: Status.COMPLETED,
                             url: `https://s3aws.blob.core.windows.net/output/buckley/output/${dataset.id}/textured/100/_smdjs`
                         };
                         resourceID = resources.push(smdjsResource);
                         smdjsResource.id = resourceID - 1;
-                        urls.push(`/resources/${resourceID - 1}`);
+                        urls.push(getFullUrl(`/resources/${resourceID - 1}`));
                 }
                 return {
                     id,
