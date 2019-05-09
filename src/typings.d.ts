@@ -4,6 +4,13 @@ interface NodeModule {
   id: string;
 }
 
+declare module 'pouchdb' {
+	var PouchDB: any;
+	export default PouchDB;
+}
+// Bluebird
+declare var P: any;
+
 declare var OSG: OSGModule;
 interface OSGModule {
   globalify: () => void;
@@ -37,7 +44,7 @@ declare module osg {
 		neg(a: osg.Vec3, result: osg.Vec3): osg.Vec3;
 	}
 
-	
+
 	export var Vec4;
 	export interface Vec4 {
 		//createAndSet(x, y, z, w): osg.Vec4;
@@ -79,7 +86,7 @@ declare module osg {
 		makeRotateFromTo( from:osg.Vec3, to:osg.Vec3, out:osg.Quat) : osg.Quat;
 	}
 
-	
+
 	export var Plane;
 	export interface Plane extends osg.Vec4 {
 		create(): osg.Vec4;
@@ -87,7 +94,7 @@ declare module osg {
 		setNormal(plane: osg.Plane, n: osg.Vec3);
 		setDistance(plane: osg.Plane, d: number);
 	}
-	
+
 	/*
 	export class Plane {
 		//constructor(p:osg.Vec4);
@@ -239,7 +246,7 @@ declare module osg {
 	export function createTexturedQuadGeometry(cornerx, cornery, cornerz, wx, wy, wz, hx, hy, hz, l?: number, b?: number, r?: number, t?: number): osg.Geometry;
 	export function createGridGeometry(cx, cy, cz, wx, wy, wz, hx, hy, hz, res1, res2): osg.Geometry;
 	export function createTexturedSphereGeometry(radius, widthSegments?: number, heightSegments?: number, phiStart?: number, phiLength?: number, thetaStart?: number, thetaLength?: number): osg.Geometry;
-	
+
 	//KdTree
 	export interface KdTreeBuilderOptions {
 		_numVerticesProcessed: number;
@@ -257,7 +264,7 @@ declare module osgAnimation {
 }
 
 declare module osgDB {
-	export function parseSceneGraph(node: {}, options?: {}): Promise<osg.Node>; 
+	export function parseSceneGraph(node: {}, options?: {}): Promise<osg.Node>;
 }
 
 declare module osgGA {
