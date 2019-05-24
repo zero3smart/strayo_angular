@@ -36,10 +36,10 @@ export class InMemoryDataService implements InMemoryDbService {
 
         // Every dataset gets two annotations, one for phantom, one for ortho one for stereo
         const annotationsPerDataSet = 3;
-        
+
         // Every annotation has up to 20 resources (safe number)
         const resourcesPerDataSet = 20;
-        
+
         const sites = siteIds.map((id, i) => {
             let name;
             let datasets;
@@ -120,13 +120,8 @@ export class InMemoryDataService implements InMemoryDbService {
                 let resourceID;
                 switch (id % annotationsPerDataSet) {
                     default:
-                        type = 'phantom';
+                        type = 'mapdata';
                         is_phantom = true;
-                        meta = '{}';
-                        data = '{}';
-                        break;
-                    case 1:
-                        type = 'orthophoto';
                         meta = '{}';
                         data = '{}';
                         const mapdataResource: any = {
@@ -137,6 +132,12 @@ export class InMemoryDataService implements InMemoryDbService {
                         resourceID = resources.push(mapdataResource);
                         mapdataResource.id = resourceID - 1;
                         urls.push(getFullUrl(`/resources/${resourceID - 1}`));
+
+                        break;
+                    case 1:
+                        type = 'orthophoto';
+                        meta = '{}';
+                        data = '{}';
                         const tilesResource: any = {
                             type: 'tiles',
                             status: Status.COMPLETED,
@@ -188,4 +189,3 @@ export class InMemoryDataService implements InMemoryDbService {
         return toReturn;
     }
 };
-
