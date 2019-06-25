@@ -2,11 +2,10 @@
   <div class="main" [ngSwitch]="viewer">
     <div #openlayers class="viewer" *ngSwitchCase="'openlayers'">
     </div>
-    <canvas class="viewer" #osgjs *ngSwitchCase="'osgjs'">
+    <div class="viewer" *ngSwitchCase="'osgjs'">
+      <canvas #osgjs >
 
-    </canvas>
-    <div #three class="viewer loading" *ngSwitchDefault>
-      Three
+      </canvas>
     </div>
   </div>
 
