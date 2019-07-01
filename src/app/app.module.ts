@@ -8,7 +8,6 @@ import { SidebarModule } from 'ng-sidebar';
 //Botstrap
 import { TabsModule } from 'ngx-bootstrap';
 import { RatingModule } from 'ngx-bootstrap';
-import { ModalModule } from 'ngx-bootstrap';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -56,8 +55,9 @@ import { AnnotationsControllerComponent } from './controllers/annotations-contro
 import { AnnotationToolComponent } from './controllers/annotations-controller/components/annotation-tool/annotation-tool.component';
 import { DatasetAnnotationsComponent } from './controllers/annotations-controller/components/dataset-annotations/dataset-annotations.component';
 import { DatasetAnnotationComponent } from './controllers/annotations-controller/components/dataset-annotation/dataset-annotation.component';
-import { NewAnnotationFormComponent } from './controllers/annotations-controller/components/new-annotation-form/new-annotation-form.component';
-import { DatasetAnnotationDetailsComponent } from './controllers/annotations-controller/components/dataset-annotation-details/dataset-annotation-details.component';
+import { ShotplanningComponent } from './components/shotplanning/shotplanning.component';
+import { ShotplanningControllerComponent } from './controllers/shotplanning-controller/shotplanning-controller.component';
+import { DatasetShotplanningComponent } from './controllers/shotplanning-controller/components/dataset-shotplanning/dataset-shotplanning.component';
 
 export const localStorageSyncReducer = (reducer: ActionReducer<any>): ActionReducer<any> =>
   localStorageSync({
@@ -93,11 +93,9 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
     AnnotationToolComponent,
     DatasetAnnotationsComponent,
     DatasetAnnotationComponent,
-    NewAnnotationFormComponent,
-    DatasetAnnotationDetailsComponent,
-  ],
-  entryComponents: [
-    NewAnnotationFormComponent
+    ShotplanningComponent,
+    ShotplanningControllerComponent,
+    DatasetShotplanningComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -107,8 +105,6 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
     //Bootstrap
     TabsModule.forRoot(),
     RatingModule.forRoot(),
-    ModalModule.forRoot(),
-
     GraphQLModule,
     HttpClientModule,
     // HttpClientInMemoryWebApiModule.forRoot(InMemoryDataService, {
