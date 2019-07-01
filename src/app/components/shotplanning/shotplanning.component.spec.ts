@@ -1,25 +1,15 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component, OnInit } from '@angular/core';
 
-import { ShotplanningComponent } from './shotplanning.component';
+@Component({
+  selector: 'app-shotplanning',
+  templateUrl: './shotplanning.component.html',
+  styleUrls: ['./shotplanning.component.css']
+})
+export class ShotplanningComponent implements OnInit {
 
-describe('ShotplanningComponent', () => {
-  let component: ShotplanningComponent;
-  let fixture: ComponentFixture<ShotplanningComponent>;
+  constructor() { }
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ ShotplanningComponent ]
-    })
-    .compileComponents();
-  }));
+  ngOnInit() {
+  }
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(ShotplanningComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+}
