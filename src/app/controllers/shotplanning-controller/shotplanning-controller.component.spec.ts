@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ShotplanningControllerComponent } from './shotplanning-controller.component';
+import { ShotplanningToolComponent } from './shotplanning-tool.component';
 
-describe('ShotplanningControllerComponent', () => {
-  let component: ShotplanningControllerComponent;
-  let fixture: ComponentFixture<ShotplanningControllerComponent>;
+describe('ShotplanningToolComponent', () => {
+  let component: ShotplanningToolComponent;
+  let fixture: ComponentFixture<ShotplanningToolComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ShotplanningControllerComponent ]
+      declarations: [ ShotplanningToolComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ShotplanningControllerComponent);
+    fixture = TestBed.createComponent(ShotplanningToolComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
