@@ -1,4 +1,4 @@
-:host {
-  border: 2px solid green;
-  grid-area: header;
+.userAccount {
+    margin-left: calc(100vw - 160px);
+    top: 62px;
 }
